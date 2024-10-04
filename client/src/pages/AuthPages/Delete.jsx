@@ -20,7 +20,7 @@ const Delete = () => {
         const time = new Date()
         const deleteUser = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/DeleteUser/${userID}`, {
+                const response = await fetch(`http://localhost:8090/DeleteUser/${userID}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

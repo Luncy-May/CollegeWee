@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { ProgressPie, Histogram, ShortCut } from '../components'
-import LineGraph from '../components/LineGraph'
-import NotAuthorizedPage from './NotAuthorizedPage';
-
-const Dashboard = ({ Darkmode }) => {
-
+import React, {useEffect, useState, useRef} from 'react'
+import NotAuthorizedPage from '../NotAuthorizedPage';
+const VirtualAssistant = () => {
     const username = localStorage.getItem("username");
     const userID = localStorage.getItem("userID");
+
     const [isLoading, setIsLoading] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState((userID !== null && userID !== undefined && userID !== ""));
     useEffect(() => {
         if (isLoggedIn) {
-            const getDashboard = async () => {
+            const time = new Date()
+            const getProfile = async () => {
                 try {
-                    const response = await fetch(`http://localhost:8090/DeleteUser/${userID}`, {
+                    const response = await fetch(`http://localhost:8090/GetProfile/${userID}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
                             username: username,
-                            userID: userID
+                            userID: userID,
+                            lastLogin: time,
                         }),
                     })
                     if (!response.ok) {
@@ -28,32 +27,39 @@ const Dashboard = ({ Darkmode }) => {
                     }
                     // Handle response if necessary
                     const data = await response.json()
-                    setError(data.message)
-
+                    
                 } catch (error) {
                     // Capture the error message to display to the user
-
                     console.error(error)
                 } finally {
                     setIsLoading(false)
                 }
             }
-            getDashboard()
+            getProfile()
         }
-    }, [isLoggedIn, userID, username])
+    }, [isLoggedIn, username, userID]);
     return (
         <div>
+            <div className='pt-5 space-y-5 text-4xl font-bold flex flex-col items-center justify-center'>Profile</div>
             {isLoggedIn ? (
-                <div className='pl-[10vw] space-y-10 p-3 mt-[5vh] overflow-hidden'>
-                    <div className='pt-5 space-y-5 text-4xl font-bold'>{username}'s Dashboard</div>
 
+                <div>
+                    <div className='flex flex-col items-center justify-center'>
+                        <div>
+                            
+                            <form className='pt-5 space-y-5 text-4xl font-bold flex flex-col items-center justify-center' onSubmit={onSubmit}>
+                                <button type="submit">
+                                    Log Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             ) : (<div>
-                <div className='pt-5 space-y-5 text-4xl font-bold flex flex-col items-center justify-center'>Dashboard</div>
                 <NotAuthorizedPage />
             </div>)}
         </div>
     )
 }
 
-export default Dashboard
+export default VirtualAssistant

@@ -17,7 +17,7 @@ export default function Register() {
         const time = new Date()
         setCreatedAt(time)
         try {
-            const response = await fetch('http://localhost:8080/register', {
+            const response = await fetch('http://localhost:8090/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
